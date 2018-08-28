@@ -1,0 +1,37 @@
+/* INDEX PAGE */
+
+.indexContainer{
+  position:relative;
+  text-align: center;
+  color:white;
+}
+
+#index{
+  width:100%;
+}
+
+.indexTitle{
+  position:absolute;
+  top:40%;
+  left:35%;
+  font-size: 48px;
+}
+
+.indexButton{
+  position:absolute;
+  top:50%;
+  left:45%;
+}
+
+/* RESTAURANTS PAGE */
+
+.row{
+  display:flex;
+  flex-wrap:wrap;
+}
+
+/* NEW RESTAURANT PAGE */
+
+input{
+  width:30%;
+}

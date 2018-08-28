@@ -1,0 +1,28 @@
+<% include ../partials/header %>
+
+<div class="jumbotron text-center">
+  <h1>Show Page</h1>
+  <a class="btn btn-primary" href="/restaurants">Back to Restaurants</a>
+</div>
+
+<div class="container">
+  <div class="img-thumbnail">
+    <img src="<%= restaurant.image %>">
+    <h1><%= restaurant.name %></h1>
+    <p><%= restaurant.description %></p>
+  </div>
+
+  <div class="thumbnail">
+    <p>
+      <a class="btn btn-primary" href="/restaurants/<%= restaurant._id %>/comments/new">Add New Comment</a>
+    </p>
+    <% restaurant.comments.forEach((comment)=>{ %>
+      <p>
+        <strong><%= comment.author %></strong> - <%= comment.text %>
+      </p>
+    <% }) %>
+  </div>
+</div>
+
+
+<% include ../partials/footer %>
