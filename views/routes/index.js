@@ -1,7 +1,7 @@
 const express = require('express'),
       router  = express.Router(),
       passport= require('passport'),
-      User    = require("../models/user");
+      User    = require("../../models/user");
 
 router.get('/register', (req,res)=>{
   res.render('register');
@@ -11,10 +11,11 @@ router.post('/register', (req,res)=>{
   let newUser = new User({username: req.body.username});
   User.register(newUser, req.body.password, (err, user)=>{
     if(err){
-      console.log(err);
-      return res.render('register');
+      req.flash('error', err.message);
+      return res.redirect('register');
     } else {
       passport.authenticate('local')(req,res, ()=>{
+        req.flash('success', "Welcome to the Food Hub " + user.username);
         res.redirect('/restaurants');
       })
     }
@@ -24,7 +25,7 @@ router.post('/register', (req,res)=>{
 // LOGIN FORM
 
 router.get('/login', (req,res)=>{
-  res.render('login')
+  res.render('login');
 })
 
 router.post('/login', passport.authenticate('local',
@@ -36,14 +37,8 @@ router.post('/login', passport.authenticate('local',
 
 router.get('/logout', (req,res)=>{
   req.logout();
+  req.flash('success', "Successfully Logged Out!");
   res.redirect('/restaurants')
 })
-
-function isLoggedIn(req, res, next) {
-  if(req.isAuthenticated()){
-    return next();
-  }
-  res.redirect('/login');
-}
 
 module.exports = router;

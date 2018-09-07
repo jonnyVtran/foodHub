@@ -1,6 +1,7 @@
 const express = require('express'),
       router  = express.Router(),
-      Restaurant = require('../models/restaurant')
+      Restaurant = require('../../models/restaurant'),
+      middleware = require('../../middleware')
 
 router.get('/', (req,res)=>{
   res.render('index');
@@ -9,48 +10,84 @@ router.get('/', (req,res)=>{
 router.get('/restaurants', (req,res)=>{
   Restaurant.find({}, (err, allRestaurants)=>{
     if(err){
-      console.log("ERROR OCCURRED");
+      req.flash("error", "Restaurant not found")
+      res.redirect('back');
     } else {
       res.render('restaurants/restaurants', {restaurants:allRestaurants})
     }
   })
 })
 
-router.post('/restaurants', (req,res)=>{
+router.post('/restaurants', middleware.isLoggedIn, (req,res)=>{
   let name=req.body.name;
   let image=req.body.image;
-  let desc=req.body.description;
-  let newRestaurant={name:name, image:image, desc:desc}
+  let desc=req.body.desc;
+  let author= {
+    id: req.user._id,
+    username: req.user.username
+  }
+  let newRestaurant={name, image, desc, author}
   Restaurant.create(newRestaurant, (err, newRest)=>{
     if(err){
-      console.log(err);
+      req.flash('error', "Restaurant create error")
+      res.redirect('/restaurants')
     } else {
-      res.redirect('/restaurants/restaurants')
+      req.flash("success", "Restaurant successfully created!");
+      res.redirect('/restaurants')
     }
   })
 })
 
 // NEW RESTAURANT PAGE
-router.get('/restaurants/new', (req,res)=>{
+router.get('/restaurants/new', middleware.isLoggedIn, (req,res)=>{
   res.render('restaurants/new');
 })
 
 // SHOW PAGE
 router.get('/restaurants/:id', (req,res)=>{
   Restaurant.findById(req.params.id).populate('comments').exec((err, foundRestaurant)=>{
-    if(err){
-      console.log(err)
+    if(err || !foundRestaurant){
+      req.flash("error", "Restaurant not found")
+      res.redirect('/restaurants');
     } else {
       res.render('restaurants/show', {restaurant: foundRestaurant})
     }
   })
 })
 
-function isLoggedIn(req, res, next) {
-  if(req.isAuthenticated()){
-    return next();
-  }
-  res.redirect('/login');
-}
+// EDIT
+
+router.get('/restaurants/:id/edit', middleware.checkRestaurantOwnership, (req,res)=>{
+    Restaurant.findById(req.params.id, (err, foundRestaurant)=>{
+      res.render('restaurants/edit', {restaurant:foundRestaurant});
+    });
+})
+
+// UPDATE
+
+router.put('/restaurants/:id', middleware.checkRestaurantOwnership, (req,res)=>{
+  Restaurant.findByIdAndUpdate(req.params.id, req.body.restaurant, (err, updatedRestaurant)=>{
+    if(err){
+      res.redirect('/restaurants');
+    } else {
+      req.flash('success', 'Restaurant successfully updated')
+      res.redirect('/restaurants/' + req.params.id);
+    }
+  })
+})
+
+// DESTROY
+
+router.delete("/restaurants/:id", middleware.checkRestaurantOwnership, (req,res)=>{
+  Restaurant.findByIdAndRemove(req.params.id, (err)=>{
+    if(err){
+      req.flash('error', 'Restaurant not found')
+      res.redirect("/restaurants");
+    } else {
+      req.flash('error', "Restaurant successfully deleted")
+      res.redirect('/restaurants');
+    }
+  })
+})
 
 module.exports = router;

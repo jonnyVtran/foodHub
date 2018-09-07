@@ -1,20 +1,23 @@
 <% include ../partials/header %>
 
-<header class='jumbotron text-center'>
-  <h1>Restaurants</h1>
-  <a class="btn btn-primary" href="/restaurants/new">Add a new Restaurant</a>
-</header>
-
 <div class="container">
-  <div class="row">
+  <header class='jumbotron text-center'>
+    <h1>Welcome to the Food Hub!</h1>
+    <p>A compilation of our users' favorite spots to dine.</p>
+      <a class="btn btn-primary btn-sm" href="/restaurants/new">Add a new Restaurant</a>
+  </header>
+  <div class="row mb-5">
     <% restaurants.forEach((restaurant)=>{ %>
       <div class="col-md-4 col-sm-6">
         <div class="img-thumbnail">
           <img class="img-fluid" src="<%= restaurant.image %>">
-          <div class="caption">
-            <h1><%= restaurant.name %></h1>
+          <div class="container m-2">
+            <div class="caption">
+              <h1><%= restaurant.name %></h1>
+            </div>
+            <hr>
+            <a class="btn btn-primary btn-sm" href="/restaurants/<%= restaurant._id %>">More info</a>
           </div>
-          <a class="btn btn-primary" href="/restaurants/<%= restaurant._id %>">More info</a>
         </div>
       </div>
     <% }) %>

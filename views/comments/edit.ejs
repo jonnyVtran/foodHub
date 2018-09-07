@@ -2,12 +2,12 @@
 
 <div class="container">
   <div class="jumbotron text-center">
-    <h1>Add New Comment to <%= restaurant.name %></h1>
+    <h1>Edit Comment</h1>
   </div>
   <div class="formContainer mx-auto">
-    <form method="POST" action='/restaurants/<%= restaurant._id %>/comments'>
+    <form method="POST" action='/restaurants/<%= restaurant_id %>/comments/<%= comment._id %>?_method=PUT'>
       <div class="form-group">
-        <input type="text" name="comment[text]" placeholder="Comment" required>
+        <input type="text" name="comment[text]" value="<%= comment.text %>" required>
       </div>
       <button class="btn btn-primary submitBtn">Submit</button>
     </form>

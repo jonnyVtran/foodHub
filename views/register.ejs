@@ -1,17 +1,32 @@
 <% include ./partials/header %>
 
 <div class="container">
-  <h1 class="text-center">Register</h1>
-  <div class="text-center">
+  <div class="jumbotron text-center">
+    <h1>Register</h1>
+  </div>
+  <div class="formContainer mx-auto">
     <form method="POST" action='/register'>
       <div class="form-group">
-        <input type="text" name="username" placeholder="Username">
+        <input type="text" name="username" placeholder="Username" required>
       </div>
       <div class="form-group">
-        <input type="password" name="password" placeholder="Password">
+        <input type="password" name="password" placeholder="Password" id="password" required>
       </div>
-      <button class="btn btn-primary">Sign Up</button>
+      <div class="form-group">
+        <input type="password" name="password_confirm" placeholder="Confirm Password" id="password_confirm" oninput="check(this)" required>
+      </div>
+      <script>
+      function check(input) {
+        if (input.value != document.getElementById('password').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+      </script>
+      <button class="btn btn-primary submitBtn">Sign Up</button>
     </form>
+    <a href="restaurants">Go Back</a>
   </div>
 </div>
 

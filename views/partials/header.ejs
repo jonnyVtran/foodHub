@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Food Log</title>
+    <title>Food Hub</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="/styles.css">
   </head>
@@ -10,7 +10,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/">Restaurants</a>
+        <a class="navbar-brand" href="/">Food Hub</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,3 +35,16 @@
         </div>
       </div>
     </nav>
+
+    <div class="container">
+      <% if(error && error.length>0) { %>
+        <div class="alert alert-danger mt-3" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
+      <% if(success && success.length>0) { %>
+        <div class="alert alert-success mt-3" role="alert">
+        <%= success %>
+      </div>
+      <% } %>
+    </div>
